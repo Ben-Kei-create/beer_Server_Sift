@@ -13,6 +13,7 @@
 		28F82B945D0465F71DB4C0FD /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 07418296138D7108D9CDCFA0 /* GoogleMobileAds */; };
 		50AE1D3846E1B20F55EBF9ED /* AdBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C83C20EF599C2002B6BA0 /* AdBannerView.swift */; };
 		53168F15B1855F7896C18164 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 478152F0EE7F55DED9EC3EF5 /* Assets.xcassets */; };
+		A1B2C3D4E5F60718293A4B5C /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5D /* SoundPlayer.swift */; };
 		621692E2366E0711EC47BEE8 /* QuestionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47DB9D71C3F6983CA1E6385 /* QuestionRepository.swift */; };
 		6BE9866D43FFE56F29DE13C3 /* BeerQuizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292BB6A61D810B0AFD7CC746 /* BeerQuizApp.swift */; };
 		751900CDFD41C0995AEF66B0 /* QuizSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E4F700FE328FC97A70F3CD /* QuizSession.swift */; };
@@ -52,6 +53,7 @@
 		8431DBC90A7CDF2B0CE49304 /* AnswerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerRecord.swift; sourceTree = "<group>"; };
 		936F5B30889700A8C7E00513 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B2AFFCBC5E044DFD3F10BF33 /* beer_quiz.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = beer_quiz.json; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5D /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		C47DB9D71C3F6983CA1E6385 /* QuestionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionRepository.swift; sourceTree = "<group>"; };
 		C6725E1069148873B9B65266 /* Difficulty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
 		CD4B217B6023F483F1D1742A /* UnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableView.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				C47DB9D71C3F6983CA1E6385 /* QuestionRepository.swift */,
+				A1B2C3D4E5F60718293A4B5D /* SoundPlayer.swift */,
 			);
 			name = Services;
 			path = BeerQuiz/Services;
@@ -269,6 +272,7 @@
 				ACCB30D056825666E1CD4287 /* Difficulty.swift in Sources */,
 				EDC7C948ECBBE66DB4486873 /* HomeView.swift in Sources */,
 				621692E2366E0711EC47BEE8 /* QuestionRepository.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* SoundPlayer.swift in Sources */,
 				A5B18D7D900326B16819C170 /* QuizQuestion.swift in Sources */,
 				751900CDFD41C0995AEF66B0 /* QuizSession.swift in Sources */,
 				1D45215EF4A6058F5E456AFF /* QuizView.swift in Sources */,

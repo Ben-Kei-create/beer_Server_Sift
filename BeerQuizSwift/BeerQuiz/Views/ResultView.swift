@@ -13,6 +13,10 @@ struct ResultView: View {
         return Int((Double(session.score) / Double(session.questions.count) * 100).rounded())
     }
 
+    private var shareText: String {
+        "ビールクイズで \(session.score) / \(session.questions.count) 問正解！（正答率 \(percentage)%）🍺 #ビールクイズ"
+    }
+
     var body: some View {
         ZStack {
             BeerBackdrop()
@@ -39,6 +43,12 @@ struct ResultView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(BeerPrimaryButtonStyle())
+
+                        ShareLink(item: shareText) {
+                            Label("結果をシェア", systemImage: "square.and.arrow.up")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(BeerSecondaryButtonStyle())
 
                         Button(action: close) {
                             Label("ホームに戻る", systemImage: "house.fill")

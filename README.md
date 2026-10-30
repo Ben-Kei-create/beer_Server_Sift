@@ -7,8 +7,6 @@
 
 - `BeerQuizSwift/`  
   SwiftUIネイティブ版。App Store申請対象のXcodeプロジェクト、問題データ、テストを含む。
-- `beer_quiz/`  
-  旧Flutter版の作業フォルダ。Swift版リリースでは参照用として扱う。
 - `privacy-policy.html` / `index.html`  
   プライバシーポリシーの公開HTML（同内容）。
 - `support.html`  

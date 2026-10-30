@@ -151,11 +151,18 @@ struct QuizView: View {
 
         selectedIndex = index
         lastAnswer = session.answerCurrentQuestion(selectedIndex: index)
+
+        if lastAnswer?.isCorrect == true {
+            SoundPlayer.playCorrect()
+        } else {
+            SoundPlayer.playIncorrect()
+        }
     }
 
     private func continueQuiz() {
         if session.isLastQuestion {
             session.moveToNextQuestion()
+            SoundPlayer.playFinish()
             return
         }
 
