@@ -1,7 +1,7 @@
 import SwiftUI
 
 private enum AppRoute: Hashable {
-    case quiz
+    case quiz(QuizMode)
 }
 
 struct ContentView: View {
@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var questions: [QuizQuestion] = []
     @State private var loadError: String?
     @State private var path: [AppRoute] = []
+    @State private var store = GameStore()
 
     var body: some View {
         if showSplash {
@@ -25,20 +26,36 @@ struct ContentView: View {
                 } else {
                     HomeView(
                         questionCount: questions.count,
-                        startQuiz: { path.append(.quiz) }
+                        reviewCount: store.reviewQuestions(from: questions).count,
+                        startQuiz: { path.append(.quiz(.normal)) },
+                        startReview: { path.append(.quiz(.review)) },
+                        startDaily: { path.append(.quiz(.daily)) }
                     )
                 }
             }
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
-                case .quiz:
-                    QuizView(session: QuizSession(questions: questions))
+                case let .quiz(mode):
+                    QuizView(session: makeSession(for: mode), mode: mode)
                 }
             }
             .task {
                 loadQuestionsIfNeeded()
             }
         }
+        .environment(store)
+        }
+    }
+
+    private func makeSession(for mode: QuizMode) -> QuizSession {
+        switch mode {
+        case .normal:
+            return QuizSession(questions: questions)
+        case .review:
+            return QuizSession(questions: store.reviewQuestions(from: questions))
+        case .daily:
+            let daily = store.dailyQuestion(from: questions).map { [$0] } ?? []
+            return QuizSession(questions: daily, questionLimit: 1, shuffle: false)
         }
     }
 

@@ -50,3 +50,9 @@ struct QuizSession {
         currentIndex += 1
     }
 }
+
+enum QuizMode: Hashable {
+    case normal
+    case review
+    case daily
+}

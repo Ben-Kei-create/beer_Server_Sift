@@ -4,6 +4,8 @@ struct ResultView: View {
     let session: QuizSession
     let restart: () -> Void
     let close: () -> Void
+    var canRestart: Bool = true
+    var isNewHighScore: Bool = false
 
     private var percentage: Int {
         guard !session.questions.isEmpty else {
@@ -32,17 +34,25 @@ struct ResultView: View {
                             Text("正答率 \(percentage)%")
                                 .font(.title3.weight(.bold))
                                 .foregroundStyle(BeerTheme.hop)
+
+                            if isNewHighScore {
+                                Label("ハイスコア更新！", systemImage: "trophy.fill")
+                                    .font(.headline.weight(.bold))
+                                    .foregroundStyle(BeerTheme.deepAmber)
+                            }
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                     }
 
                     VStack(spacing: 12) {
-                        Button(action: restart) {
-                            Label("もう一度挑戦", systemImage: "arrow.clockwise")
-                                .frame(maxWidth: .infinity)
+                        if canRestart {
+                            Button(action: restart) {
+                                Label("もう一度挑戦", systemImage: "arrow.clockwise")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(BeerPrimaryButtonStyle())
                         }
-                        .buttonStyle(BeerPrimaryButtonStyle())
 
                         ShareLink(item: shareText) {
                             Label("結果をシェア", systemImage: "square.and.arrow.up")

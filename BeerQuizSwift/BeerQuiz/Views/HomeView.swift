@@ -2,7 +2,13 @@ import SwiftUI
 
 struct HomeView: View {
     let questionCount: Int
+    let reviewCount: Int
     let startQuiz: () -> Void
+    let startReview: () -> Void
+    let startDaily: () -> Void
+
+    @Environment(GameStore.self) private var store
+    @State private var showSettings = false
 
     var body: some View {
         ZStack {
@@ -13,6 +19,7 @@ struct HomeView: View {
                     hero
                     stats
                     startButton
+                    secondaryButtons
                     notice
                 }
                 .padding(.horizontal, 20)
@@ -20,6 +27,21 @@ struct HomeView: View {
                 .padding(.bottom, 28)
             }
             .scrollIndicators(.hidden)
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .foregroundStyle(BeerTheme.malt)
+                }
+                .accessibilityLabel("設定")
+            }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
     }
 
@@ -64,6 +86,15 @@ struct HomeView: View {
                     StatBadge(title: "1回", value: "10問", symbol: "timer")
                 }
 
+                HStack(spacing: 12) {
+                    StatBadge(title: "ハイスコア", value: "\(store.highScore)/10", symbol: "trophy.fill")
+                    StatBadge(
+                        title: "累計正答率",
+                        value: store.accuracyPercent.map { "\($0)%" } ?? "--",
+                        symbol: "chart.line.uptrend.xyaxis"
+                    )
+                }
+
                 HStack(spacing: 10) {
                     BeerChip(title: "初級", color: BeerTheme.skyFoam)
                     BeerChip(title: "中級", color: BeerTheme.amber)
@@ -80,6 +111,32 @@ struct HomeView: View {
         }
         .buttonStyle(BeerPrimaryButtonStyle())
         .accessibilityIdentifier("start_quiz_button")
+    }
+
+    private var secondaryButtons: some View {
+        VStack(spacing: 12) {
+            Button(action: startDaily) {
+                Label(
+                    store.isDailyCompleted() ? "今日の1問（挑戦済み）" : "今日の1問",
+                    systemImage: store.isDailyCompleted() ? "checkmark.circle.fill" : "calendar"
+                )
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(BeerSecondaryButtonStyle())
+            .disabled(store.isDailyCompleted())
+            .accessibilityIdentifier("daily_quiz_button")
+
+            Button(action: startReview) {
+                Label(
+                    reviewCount > 0 ? "間違えた問題を復習（\(reviewCount)問）" : "間違えた問題を復習",
+                    systemImage: "arrow.triangle.2.circlepath"
+                )
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(BeerSecondaryButtonStyle())
+            .disabled(reviewCount == 0)
+            .accessibilityIdentifier("review_quiz_button")
+        }
     }
 
     private var notice: some View {
@@ -122,5 +179,6 @@ private struct StatBadge: View {
 }
 
 #Preview {
-    HomeView(questionCount: 75, startQuiz: {})
+    HomeView(questionCount: 75, reviewCount: 3, startQuiz: {}, startReview: {}, startDaily: {})
+        .environment(GameStore())
 }

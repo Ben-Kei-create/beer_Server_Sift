@@ -2,17 +2,44 @@ import AudioToolbox
 import UIKit
 
 enum SoundPlayer {
+    static let soundEnabledKey = "soundEnabled"
+    static let hapticsEnabledKey = "hapticsEnabled"
+
+    private static var isSoundEnabled: Bool {
+        UserDefaults.standard.object(forKey: soundEnabledKey) as? Bool ?? true
+    }
+
+    private static var isHapticsEnabled: Bool {
+        UserDefaults.standard.object(forKey: hapticsEnabledKey) as? Bool ?? true
+    }
+
     static func playCorrect() {
-        AudioServicesPlaySystemSound(1057)
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        play(1057)
+        notify(.success)
     }
 
     static func playIncorrect() {
-        AudioServicesPlaySystemSound(1053)
-        UINotificationFeedbackGenerator().notificationOccurred(.error)
+        play(1053)
+        notify(.error)
     }
 
     static func playFinish() {
-        AudioServicesPlaySystemSound(1025)
+        play(1025)
+    }
+
+    private static func play(_ soundID: SystemSoundID) {
+        guard isSoundEnabled else {
+            return
+        }
+
+        AudioServicesPlaySystemSound(soundID)
+    }
+
+    private static func notify(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+        guard isHapticsEnabled else {
+            return
+        }
+
+        UINotificationFeedbackGenerator().notificationOccurred(type)
     }
 }

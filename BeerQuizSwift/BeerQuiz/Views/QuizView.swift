@@ -2,15 +2,20 @@ import SwiftUI
 
 struct QuizView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(GameStore.self) private var store
+
+    let mode: QuizMode
 
     @State var session: QuizSession
+    @State private var isNewHighScore = false
     @State private var selectedIndex: Int?
     @State private var lastAnswer: AnswerRecord?
     @State private var timeRemaining: Int
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
-    init(session: QuizSession) {
+    init(session: QuizSession, mode: QuizMode = .normal) {
+        self.mode = mode
         _session = State(initialValue: session)
         _timeRemaining = State(initialValue: session.currentQuestion?.difficulty.timeLimit ?? 20)
     }
@@ -20,7 +25,13 @@ struct QuizView: View {
             BeerBackdrop()
 
             if session.isComplete {
-                ResultView(session: session, restart: restart, close: { dismiss() })
+                ResultView(
+                    session: session,
+                    restart: restart,
+                    close: { dismiss() },
+                    canRestart: mode == .normal,
+                    isNewHighScore: isNewHighScore
+                )
             } else if let question = session.currentQuestion {
                 questionBody(question)
             } else {
@@ -152,6 +163,14 @@ struct QuizView: View {
         selectedIndex = index
         lastAnswer = session.answerCurrentQuestion(selectedIndex: index)
 
+        if let lastAnswer {
+            store.recordAnswer(lastAnswer)
+
+            if mode == .daily {
+                store.recordDailyCompleted()
+            }
+        }
+
         if lastAnswer?.isCorrect == true {
             SoundPlayer.playCorrect()
         } else {
@@ -162,6 +181,11 @@ struct QuizView: View {
     private func continueQuiz() {
         if session.isLastQuestion {
             session.moveToNextQuestion()
+
+            if mode == .normal {
+                isNewHighScore = store.recordGameFinished(score: session.score)
+            }
+
             SoundPlayer.playFinish()
             return
         }
@@ -175,6 +199,7 @@ struct QuizView: View {
     private func restart() {
         let sourceQuestions = session.questions
         session = QuizSession(questions: sourceQuestions, questionLimit: sourceQuestions.count, shuffle: true)
+        isNewHighScore = false
         selectedIndex = nil
         lastAnswer = nil
         timeRemaining = session.currentQuestion?.difficulty.timeLimit ?? 20
@@ -310,4 +335,5 @@ private struct AnswerExplanationView: View {
             shuffle: false
         )
     )
+    .environment(GameStore())
 }
