@@ -148,7 +148,7 @@ struct HomeView: View {
 
                 Link(
                     "プライバシーポリシー",
-                    destination: URL(string: "https://ben-kei-create.github.io/beer_Server/privacy-policy.html")!
+                    destination: URL(string: "https://www.givetex.org/apps/beerquiz/privacy/")!
                 )
                 .font(.callout.weight(.semibold))
                 .foregroundStyle(BeerTheme.hop)
